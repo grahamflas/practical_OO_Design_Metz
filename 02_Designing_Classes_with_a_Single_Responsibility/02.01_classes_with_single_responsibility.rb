@@ -97,3 +97,34 @@ class Gear_That_Does_Too_Much
   end
 end
 
+=begin
+  
+###_______________ Writing Code That Embraces Change _______________
+
+### _____ Hide Messy Data Structures _____
+
+  + Suppose you're working with messy external data 
+    -- a 2-dimensional array of rim and tire sizes, where rim is at array[0] and tire is at array[1]
+
+  + The class you create has methods that interact with this data by indexing into the array
+    + PROBLEM, because any method you write DEPENDS on the structure of the external data
+    + Any reference to the array's structure is LEAKY --that is, it escapes encapsulation an insinuates itself throughout your code
+
+### _________________________
+  
+=end
+
+# rim = data[0], tire =  data[1]
+DATA = [[622,20], [622,23], [559,30], [559,40]]
+
+class ObscuringReferences
+  attr_reader :data
+
+  def initialize(data)
+    @data = data
+  end
+
+  def diameters
+    self.data.collect {|cell| cell[0] + (cell[1] * 2)}
+  end
+end
