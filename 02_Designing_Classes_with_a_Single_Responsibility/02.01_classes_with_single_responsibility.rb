@@ -125,6 +125,36 @@ class ObscuringReferences
   end
 
   def diameters
-    self.data.collect {|cell| cell[0] + (cell[1] * 2)}
+    data.collect {|cell| cell[0] + (cell[1] * 2)}
+  end
+end
+
+=begin
+  + The class defined below has the exact same interface
+    + Initialize using a 2D array
+    + Implement #diameter
+
+  + However, this implementation of #diameter has no knowledge of the internal structure of the array used ot  initialize the object -- instead, it knows that `wheels` returns an enumerable that responds to .rim and .tire
+  + Encapsulate the structure of the incoming array using the #wheelify method, which returns an array of Structs
+    + Struct is a way to bundle a number of attributes together using accessor methods without having to write an explicit class
+
+  + The advantage of this style is that you're protecting against changes to the structure of your external data. Any change to the incoming data will be dealt with in the code that creates the Wheel Struct
+
+=end
+
+class RevealingReferences
+  attr_reader :wheels
+  def initialize(data)
+    @wheels = wheelify(data)
+  end
+
+  def diameters
+    wheels.map { |wheel| wheel.rim + (wheel.tire * 2) }
+  end
+
+  Wheel = Struct.new(:rim, :tire)
+
+  def wheelify(data)
+    data.map { |cell| Wheel.new(cell[0], cell[1]) }
   end
 end
