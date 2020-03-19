@@ -158,3 +158,60 @@ class RevealingReferences
     data.map { |cell| Wheel.new(cell[0], cell[1]) }
   end
 end
+
+=begin
+###_______________ Enforce Single Responsibility Everywhere _______________
+  + Methods should also adhere to the single responsibility principle
+    1) Ask them what they do
+    2) Describe what they do in a single sentence without using AND or OR
+    + Note that #diameters does two things -- it iterates over wheels AND it calculates the diameter
+      + Split this into two methods
+  
+  + Separating iteration from the action that's being performed on each element is a common case of multiple responsibility that is easy to recognize
+=end
+
+def diameters
+  wheels.map { |wheel| diameter(wheel) }
+end
+
+def diameter(wheel)
+  wheel.rim + (wheel.tire *2)
+end
+
+=begin
+###_______________ Isolate Extra Responsibilities in Classes _______________
+
+  + Notice that the Gear has some Wheel-like behavior -- Likely need a Wheel class
+  + Suppose you have design restrictions
+    + Use Struct to isolate the wheel-like behavior without committing to a new class
+=end
+
+class Gear_with_Wheel
+  attr_reader :chainring,
+              :cog,
+              :wheel
+
+  def initialize(chainring, cog, rim, tire)
+    @chainring = chainring
+    @cog = cog
+    @wheel = Wheel.new(rim, tire)
+  end
+
+  def ratio
+    chainring / cog.to_f
+  end
+
+  def gear_inches
+    ratio * wheel.diameter
+  end
+
+  Wheel = Struct.new(:rim, :tire) do
+    def diameter
+      rim + (tire * 2)
+    end
+  end
+end
+
+=begin
+  + Using Struct as above suggests that a Wheel wouldn't exist in isolation from a Gear -- we know that's not true, so separate Wheel into its own class
+=end
