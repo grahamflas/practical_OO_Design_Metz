@@ -30,7 +30,7 @@ class Gear
   end
 
   def gear_inches
-    ratio * Wheel(rim, tire).diameter
+    ratio * Wheel.new(rim, tire).diameter
   end
 
   def ratio
@@ -41,7 +41,7 @@ end
 
 class Wheel
   attr_reader :rim, :tire
-  def initialized(rim, tire)
+  def initialize(rim, tire)
     @rim  = rim
     @tire = tire
   end
@@ -55,7 +55,7 @@ end
 ### _________ Recognizing Dependencies _________
 
 An object has a dependency when it knows
-  1) The name of anoher class
+  1) The name of another class
       + Gear expects Wheel to exist
 
   2) The name of a message that it intends to send to someone other than self.
@@ -68,3 +68,4 @@ An object has a dependency when it knows
 
 Some dependencies are inevitable, because object must collaborate. However, design challenge is to minimize dependencies
 =end
+
