@@ -105,3 +105,33 @@ end
 
 # Gear expects a "Duck" that knows #diameter
 gear_duck = Gear_With_Dependency_Injection.new(52, 11, Wheel.new(26, 1.5))
+
+=begin
+## _______________ Isolate Dependences _______________
+Sometimes constraints will prevent you from being able to remove unnecessary dependencies from a class. 
+If this is the case, isolate those dependencies by
+  + Explicitly exposing them
+  + Reducing their reach into the class
+
+Example below moves the creation of a Wheel object from inside #gear_inches to the class' #initialize method.
+  1) Reveals the dependency
+  2) Lowers the barrier to reuse
+  3) Makes the code easier to refactor if circumstances allow
+=end
+
+class Gear_Isolated_Dependency
+  attr_reader :chainring, :cog, :wheel
+  def initialize(chainring, cog, rim, tire)
+    @chainring = chainring
+    @cog = cog
+    @wheel = Wheel.new(rim, tire)
+  end
+
+  def ratio
+    chainring / cog.to_f
+  end
+
+  def gear_inches
+    ratio * wheel.diameter
+  end
+endgit 
