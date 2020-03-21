@@ -186,7 +186,7 @@ Disadvantages of keyword arguments:
 
 class Gear_With_Keyword_Args
   attr_reader :chainring, :cog, :wheel
-  def initialize(chainring:, cog:, wheel:)
+  def initialize(chainring: 40, cog: 18, wheel:)
     @chainring = chainring
     @cog = cog
     @wheel = wheel
@@ -208,6 +208,11 @@ end
 # Note, args passed to #new are backwards with respect to method signature of #initialize
 Gear_With_Keyword_Args.new(
   wheel: Wheel.new(26, 1.5),
-  cog: 11
-  chainring: 52, 
+  cog: 11,
+  chainring: 52 
+)
+
+#Use defaults
+Gear_With_Keyword_Args.new(
+  wheel: Wheel.new(26, 1.5)
 )
