@@ -134,4 +134,4 @@ class Gear_Isolated_Dependency
   def gear_inches
     ratio * wheel.diameter
   end
-endgit 
+end
