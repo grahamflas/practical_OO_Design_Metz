@@ -135,3 +135,38 @@ class Gear_Isolated_Dependency
     ratio * wheel.diameter
   end
 end
+
+=begin
+### _______________ Isolate External Messages _______________
+
+An external message is one sent to someone other than `self`
+In #gear_inches above, Gear sends 
+  + two messages to self: `ratio` and `wheel`
+  + one message to Wheel (i.e., not self): `diameter`
+
+Imagine #gear_inches is a more complex method or that `wheel.diameter` is used throughout the class. 
+This external message to Wheel makes Gear vulnerable to a change in the name or implementation of the #diameter method in Wheel
+
+Mitigate the vulnerability posed by Gear's dependency on Wheel.diameter by preemptively encapsulating it in its own method
+=end
+
+class Gear_Encapsulated_External_Message
+  attr_reader :chainring, :cog, :wheel
+  def initialize(chainring, cog, rim, tire)
+    @chainring = chainring
+    @cog = cog
+    @wheel = Wheel.new(rim, tire)
+  end
+
+  def ratio
+    chainring / cog.to_f
+  end
+
+  def gear_inches
+    ratio * diameter
+  end
+
+  def diameter
+    wheel.diameter
+  end
+end
