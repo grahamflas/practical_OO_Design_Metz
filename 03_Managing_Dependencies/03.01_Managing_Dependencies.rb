@@ -20,7 +20,7 @@ Below is an example of a Gear object that has 4 dependencies on Wheel
 
 =end
 
-class Gear
+class Gear_With_Dependencies
   attr_reader :chainring, :cog, :rim, :tire
   def initialize(chainring, cog, rim, tire)
     @chainring = chainring
@@ -67,5 +67,41 @@ An object has a dependency when it knows
   4) The order of arguments for a message that another object responds to
 
 Some dependencies are inevitable, because object must collaborate. However, design challenge is to minimize dependencies
+
 =end
 
+=begin
+
+### _________ Writing Loosely Coupled Code ____________
+
+## ______ Inject Dependencies ______
+
++ In the example above, the #gear_inches hard-codes a reference to the Wheel class so that it can send it the message #diameter
++ It's not the Wheel class itself that's important, #gear_inches just needs an object that responds to the message #diameter
+
++ Decouple the Gear and Wheel classes by moving the creation of Wheel outside of the Gear class
+  + known as DEPENDENCY INJECTION
+
+"Using dependency injenctiton to shape code relies on your ability tto recognize that the responsibility for knowing the name of a class and the responsibility for knowing the name of the message to send to that class may belong in different objects. Just becuase Gear needs to send #diameter somewhere doesn't mean that Gear should know about Wheel"
+
+=end
+
+class Gear_With_Dependency_Injection
+  attr_reader :chainring, :cog, :wheel
+  def initialize(chainring, cog, wheel)
+    @chainring  = chainring
+    @cog        = cog
+    @wheel      = wheel
+  end
+
+  def ratio
+    chainring / cog.to_f
+  end
+
+  def gear_inches
+    ratio * wheel.diameter * 2
+  end
+end
+
+# Gear expects a "Duck" that knows #diameter
+gear_duck = Gear_With_Dependency_Injection.new(52, 11, Wheel.new(26, 1.5))
