@@ -170,3 +170,44 @@ class Gear_Encapsulated_External_Message
     wheel.diameter
   end
 end
+
+=begin
+### _______________ Remove Argument-Order Dependencies _______________
+Many method signatures requre arguments to be passed in an a specific, fixed order.
+Senders of those methods are required to know about this order and will have to change if the order or composition of the method's arguments changes.
+
+SOLUTION: Use KEYWORD ARGUMENTS to avoid depending on positional arguments
+Advantages of keyword arguments:
+  + Arguments can be passed in any order
+  + Methods that use keyword arguments can add or remove arguments and defaults without worrying about side effects to other code
+Disadvantages of keyword arguments:
+  + Objects that use keyword arguments are now dependent on the names of the keywords; however, this dependency is relatively more stable and easier to change
+=end
+
+class Gear_With_Keyword_Args
+  attr_reader :chainring, :cog, :wheel
+  def initialize(chainring:, cog:, wheel:)
+    @chainring = chainring
+    @cog = cog
+    @wheel = wheel
+  end
+
+  def ratio
+    chainring / cog.to_f
+  end
+
+  def gear_inches
+    ratio * diameter
+  end
+
+  def diameter
+    wheel.diameter
+  end
+end
+
+# Note, args passed to #new are backwards with respect to method signature of #initialize
+Gear_With_Keyword_Args.new(
+  wheel: Wheel.new(26, 1.5),
+  cog: 11
+  chainring: 52, 
+)
