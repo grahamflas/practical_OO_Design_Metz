@@ -216,3 +216,42 @@ Gear_With_Keyword_Args.new(
 Gear_With_Keyword_Args.new(
   wheel: Wheel.new(26, 1.5)
 )
+
+=begin
+### _______________ Removing Arg-Order Dependencies in External Interfaces _______________
+
+Suppose:
+  + Gear class is part of some external framework whose code you DO NOT own 
+  + Gear depends on positional arguments
+SOLUTION: encapsulate the instantiation of a new Gear object inside your own method to isolate the arg-order dependency
+  + allows you to create a FACTORY that uses keyword arguments to instantiate a new Gear
+=end
+
+module SomeExternalFramework
+  class Gear
+    attr_reader :chainring, :cog, :wheel
+    def initialize(chainring, cog, wheel)
+      @chainring = chainring
+      @cog       = cog
+      @wheel     = wheel
+    end
+
+    def ratio
+      chainring / cog.to_f
+    end
+
+    def gear_inch
+      ratio * diameter
+    end
+
+    def diameter
+      wheel.diameter
+    end
+  end
+end
+
+module GearWrapper
+  def self.gear(chainring:, cog:, wheel:)
+    SomeExternalFramework::Gear.new(chainring, cog, wheel)
+  end
+end
