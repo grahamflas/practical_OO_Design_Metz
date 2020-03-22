@@ -255,3 +255,17 @@ module GearWrapper
     SomeExternalFramework::Gear.new(chainring, cog, wheel)
   end
 end
+
+=begin
+### _______________ Managing Dependency Direction _______________
+
+When choosing the direction of your dependency, aim to depend on code that is the least likely to change.
+Three truths about code:
+  1) Some classes are more likely than others to change in requirements
+
+  2) Concrete classes are more likely to change than abstract classes
+    + Abstractions represent comon, stable qualities and are .: less likely to change.
+
+  3) Changing a class with many dependences has wide-spread consequences
+
+=end
